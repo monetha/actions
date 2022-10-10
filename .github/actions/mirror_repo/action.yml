@@ -1,0 +1,16 @@
+name: "Mirror Repo"
+description: ""
+inputs:
+  ssh_private_key:
+    description: "SSH private key to the target repo"
+    required: true
+  target_repo_url:
+    description: "Target repo URL"
+    required: true
+  git_server_domain:
+    description: "Target Git server domain name"
+    required: true
+    default: "gitlab.com"
+runs:
+  using: "docker"
+  image: "Dockerfile"
