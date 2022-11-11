@@ -1,0 +1,61 @@
+name: "Add Terragrunt tools"
+description: "Adds Terraform v0.11.15 and Terragrunt tools"
+inputs:
+  github_oauth_token:
+    description: "GitHub OAuth token (used for accessing repos)"
+    required: true
+  arch:
+    description: "Runtime architecture"
+    default: "amd64"
+    required: true
+  terraform_version:
+    description: "Terraform version"
+    default: "0.11.15"
+    required: true
+  gruntwork_version:
+    description: "Gruntwork install version"
+    default: "v0.0.38"
+    required: true
+  terragrunt_version:
+    description: "Terragrunt version"
+    default: "v0.18.6"
+    required: true
+  terragrunt_repo:
+    description: "Terragrunt repository"
+    default: "https://github.com/monetha-lab/gruntwork-io-terragrunt"
+    required: true
+  gruntkms_version:
+    description: "gruntkms version"
+    default: "v0.0.8"
+    required: true
+  gruntkms_repo:
+    description: "gruntkms repository"
+    default: "https://github.com/monetha-lab/gruntwork-io-gruntkms"
+    required: true
+  binary_install_dir:
+    description: "Binary install directory"
+    default: "/usr/bin"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Check requirements
+      run: |
+        curl --version
+      shell: bash
+    - name: Add Terraform
+      run: |
+        curl -sSkO  https://releases.hashicorp.com/terraform/${{ inputs.terraform_version }}/terraform_${{ inputs.terraform_version }}_linux_${{ inputs.arch }}.zip
+        unzip ./terraform_${{ inputs.terraform_version }}_linux_${{ inputs.arch }}.zip
+        rm ./terraform_${{ inputs.terraform_version }}_linux_${{ inputs.arch }}.zip
+        chmod a+x terraform
+        mv terraform ${{ inputs.binary_install_dir }}
+      shell: bash
+    - name: Add Terragrunt tools
+      env:
+        GITHUB_OAUTH_TOKEN: ${{ inputs.github_oauth_token }}
+      run: |
+        curl -Ls https://raw.githubusercontent.com/gruntwork-io/gruntwork-installer/${{ inputs.gruntwork_version }}/bootstrap-gruntwork-installer.sh | bash /dev/stdin --version ${{ inputs.gruntwork_version }}
+        gruntwork-install --binary-name 'terragrunt' --repo ${{ inputs.terragrunt_repo }} --tag ${{ inputs.terragrunt_version }} --binary-install-dir ${{ inputs.binary_install_dir }}
+        gruntwork-install --binary-name 'gruntkms' --repo ${{ inputs.gruntkms_repo }} --tag ${{ inputs.gruntkms_version }} --binary-install-dir ${{ inputs.binary_install_dir }}
+      shell: bash
