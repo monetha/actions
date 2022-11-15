@@ -11,6 +11,10 @@ inputs:
     description: "Target Git server domain name"
     required: true
     default: "gitlab.com"
+  specific_branch:
+    description: "If indicated, only the specific branch will be mirrored"
+    required: true
+    default: ""
 runs:
   using: "docker"
   image: "Dockerfile"
