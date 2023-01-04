@@ -22,7 +22,7 @@ inputs:
     required: true
   terragrunt_repo:
     description: "Terragrunt repository"
-    default: "https://github.com/monetha-lab/gruntwork-io-terragrunt"
+    default: "https://github.com/mth-gruntwork-io/terragrunt"
     required: true
   gruntkms_version:
     description: "gruntkms version"
@@ -30,7 +30,7 @@ inputs:
     required: true
   gruntkms_repo:
     description: "gruntkms repository"
-    default: "https://github.com/monetha-lab/gruntwork-io-gruntkms"
+    default: "https://github.com/mth-gruntwork-io/gruntkms"
     required: true
   binary_install_dir:
     description: "Binary install directory"
